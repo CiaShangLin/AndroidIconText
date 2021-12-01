@@ -8,11 +8,16 @@
 
     <com.shang.icontext.IconText
         android:id="@+id/iconText"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/IconTextTextSize"
-        app:it_defaultText="0"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
+        app:it_defaultText="12345"
         app:it_space="@dimen/IconTextSpace"
         app:it_textSize="@dimen/IconTextTextSize"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:background="@drawable/bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button" />

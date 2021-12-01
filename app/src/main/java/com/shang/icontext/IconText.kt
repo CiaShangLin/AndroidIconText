@@ -10,18 +10,14 @@ import androidx.annotation.Dimension
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.use
 
+/*
+ * 使用方法
+ * 寬度 = 不限,warp,match,xxDp
+ * 高度 = xxDp
+ */
 class IconText @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
-
-
-    interface IJumpText {
-        fun setTextSpace(@Dimension size: Float)
-        fun setTextSize(@Dimension size: Float)
-        fun setText(text: String)
-        fun setText(text: List<String>)
-        fun defaultText(text: String)
-    }
 
     companion object {
         data class Source(val resID: Int, val key: String, var bitmap: Bitmap?)
@@ -40,6 +36,7 @@ class IconText @JvmOverloads constructor(
         }.toMap()
 
         private val mSourceSize: Int = mSourceMap.size
+
     }
 
     //顯示文字陣列
@@ -49,7 +46,7 @@ class IconText @JvmOverloads constructor(
     private var mTextSize: Float = resources.getDimension(R.dimen.IconTextTextSize)
 
     //字體內間距,不包含最左最右,最左最右用padding
-    private var mTextMargin = resources.getDimension(R.dimen.IconTextSpace)
+    private var mTextSpace = resources.getDimension(R.dimen.IconTextSpace)
 
     //wrap的時候要左到右,其他是右到左
     private var mLeftToRight = true
@@ -61,9 +58,9 @@ class IconText @JvmOverloads constructor(
             }
             mTextSize = it.getDimension(
                 R.styleable.IconText_it_textSize,
-                resources.getDimension(R.dimen.IconTextSpace)
+                resources.getDimension(R.dimen.IconTextTextSize)
             )
-            mTextMargin = it.getDimension(
+            mTextSpace = it.getDimension(
                 R.styleable.IconText_it_space,
                 resources.getDimension(R.dimen.IconTextSpace)
             )
@@ -80,26 +77,29 @@ class IconText @JvmOverloads constructor(
 
     private fun createBitmap(resID: Int): Bitmap {
         val bitmapFactory = BitmapFactory.decodeResource(resources, resID)
-        val bitmap = Bitmap.createScaledBitmap(bitmapFactory, mTextSize.toInt(), height, false)
+        //一般的數字大小應該是1:1的
+        val bitmap =
+            Bitmap.createScaledBitmap(bitmapFactory, mTextSize.toInt(), mTextSize.toInt(), false)
         bitmapFactory.recycle()
         return bitmap
     }
 
     private fun getAllTextWidth(): Float {
-        //這裡如果有其他的應該要額外寫
-        return mTextSize * mShowTextArray.size
+        //mShowTextArray應該要forEach去判斷有沒有特殊文字
+        val allTextWidth = mTextSize * mShowTextArray.size
+        val allSpaceWidth = mTextSpace * (mShowTextArray.size - 1)
+        return allTextWidth + allSpaceWidth
     }
 
     //在init的時候拿不到寬高
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         initSourceMap()
-        Log.d("DEBUG","onSizeChanged")
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        Log.d("DEBUG","onMeasure")
+
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
 
@@ -110,7 +110,10 @@ class IconText @JvmOverloads constructor(
         //Wrap的話只會跑AT_MOST,等價 ViewGroup.LayoutParams.WRAP_CONTENT
         //指定大小EXACTLY
         if (layoutParams.width == ViewGroup.LayoutParams.WRAP_CONTENT) {
-            setMeasuredDimension(getAllTextWidth().toInt() + paddingStart + paddingEnd, heightSize)
+            setMeasuredDimension(
+                getAllTextWidth().toInt() + paddingStart + paddingEnd,
+                heightSize + paddingTop + paddingBottom
+            )
             mLeftToRight = true
         } else if (widthMode == MeasureSpec.EXACTLY) {
             setMeasuredDimension(widthSize, heightSize)
@@ -123,13 +126,21 @@ class IconText @JvmOverloads constructor(
         mShowTextArray.forEachIndexed { index, key ->
             mSourceMap[key]?.bitmap?.let {
                 if (mLeftToRight) {
-                    //Wrap,只需處理paddingEnd
-                    canvas?.drawBitmap(it, mTextSize * index + paddingStart, 0f, null)
-                } else {
-                    //指定大小和match,這裡應該用Rect來算出區塊,不然現在paddingStart是不起作用的
+                    //Wrap
                     canvas?.drawBitmap(
                         it,
-                        width - (mTextSize * (mShowTextArray.size - index) + paddingEnd),
+                        (mTextSize * index) + paddingStart + (mTextSpace * index),
+                        0f + paddingTop,
+                        null
+                    )
+                } else {
+                    //指定大小和match,這裡應該用Rect來算出區塊
+                    //paddingStart目前不起作用
+                    val w =
+                        width - (mTextSize * (mShowTextArray.size - index)) + paddingEnd - (mShowTextArray.size - index) * mTextSpace
+                    canvas?.drawBitmap(
+                        it,
+                        w,
                         0f,
                         null
                     )
@@ -144,7 +155,7 @@ class IconText @JvmOverloads constructor(
         text.split("").filter { it.isNotEmpty() }.forEach {
             mShowTextArray.add(it)
         }
-        if(beforeSize != mShowTextArray.size){
+        if (beforeSize != mShowTextArray.size) {
             requestLayout()
         }
         invalidate()
@@ -154,7 +165,7 @@ class IconText @JvmOverloads constructor(
         val beforeSize = mShowTextArray.size
         mShowTextArray.clear()
         mShowTextArray.addAll(text)
-        if(beforeSize != mShowTextArray.size){
+        if (beforeSize != mShowTextArray.size) {
             requestLayout()
         }
         invalidate()
