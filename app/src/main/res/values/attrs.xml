@@ -5,6 +5,5 @@
         <attr name="it_defaultText" format="string" />
         <attr name="it_textSize" format="dimension" />
         <attr name="it_space" format="dimension" />
-        <attr name="it_rtl" format="boolean" />
     </declare-styleable>
 </resources>

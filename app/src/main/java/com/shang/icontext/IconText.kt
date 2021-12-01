@@ -17,10 +17,9 @@ class IconText @JvmOverloads constructor(
 
     interface IJumpText {
         fun setTextSpace(@Dimension size: Float)
+        fun setTextSize(@Dimension size: Float)
         fun setText(text: String)
         fun setText(text: List<String>)
-        fun setTextSize(@Dimension size: Float)
-        fun autoCountDown(time: Int,callback:Void)
         fun defaultText(text: String)
     }
 
@@ -39,6 +38,8 @@ class IconText @JvmOverloads constructor(
             put("8", Source(R.drawable.eight, "8", null))
             put("9", Source(R.drawable.nine, "9", null))
         }.toMap()
+
+        private val mSourceSize: Int = mSourceMap.size
     }
 
     //顯示文字陣列
@@ -50,8 +51,8 @@ class IconText @JvmOverloads constructor(
     //字體內間距,不包含最左最右,最左最右用padding
     private var mTextMargin = resources.getDimension(R.dimen.IconTextSpace)
 
-    //字體由右至左顯示,false=反過來由左至右
-    private var mRightToLeft = true
+    //wrap的時候要左到右,其他是右到左
+    private var mLeftToRight = true
 
     init {
         context.obtainStyledAttributes(attrs, R.styleable.IconText).use {
@@ -66,7 +67,6 @@ class IconText @JvmOverloads constructor(
                 R.styleable.IconText_it_space,
                 resources.getDimension(R.dimen.IconTextSpace)
             )
-            mRightToLeft = it.getBoolean(R.styleable.IconText_it_rtl, true)
         }
     }
 
@@ -86,6 +86,7 @@ class IconText @JvmOverloads constructor(
     }
 
     private fun getAllTextWidth(): Float {
+        //這裡如果有其他的應該要額外寫
         return mTextSize * mShowTextArray.size
     }
 
@@ -93,59 +94,69 @@ class IconText @JvmOverloads constructor(
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         initSourceMap()
+        Log.d("DEBUG","onSizeChanged")
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-
+        Log.d("DEBUG","onMeasure")
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
 
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
 
+        //Match的話她會先跑AT_MOST->EXACTLY
+        //Wrap的話只會跑AT_MOST,等價 ViewGroup.LayoutParams.WRAP_CONTENT
+        //指定大小EXACTLY
         if (layoutParams.width == ViewGroup.LayoutParams.WRAP_CONTENT) {
-            setMeasuredDimension(getAllTextWidth().toInt(), heightSize)
+            setMeasuredDimension(getAllTextWidth().toInt() + paddingStart + paddingEnd, heightSize)
+            mLeftToRight = true
+        } else if (widthMode == MeasureSpec.EXACTLY) {
+            setMeasuredDimension(widthSize, heightSize)
+            mLeftToRight = false
         }
-//        if (layoutParams.width == ViewGroup.LayoutParams.WRAP_CONTENT && layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT) {
-//
-//        } else if (layoutParams.width == ViewGroup.LayoutParams.WRAP_CONTENT) {
-//            setMeasuredDimension(widthSize, 138)
-//        } else if (layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT) {
-//            setMeasuredDimension(100, heightSize)
-//        }
     }
 
     override fun draw(canvas: Canvas?) {
         super.draw(canvas)
         mShowTextArray.forEachIndexed { index, key ->
             mSourceMap[key]?.bitmap?.let {
-                canvas?.drawBitmap(it, mTextSize * index, 0f, null)
-//                canvas?.drawBitmap(it, it.width.toFloat() * (TOTAL - index - 1), 0f, null)
+                if (mLeftToRight) {
+                    //Wrap,只需處理paddingEnd
+                    canvas?.drawBitmap(it, mTextSize * index + paddingStart, 0f, null)
+                } else {
+                    //指定大小和match,這裡應該用Rect來算出區塊,不然現在paddingStart是不起作用的
+                    canvas?.drawBitmap(
+                        it,
+                        width - (mTextSize * (mShowTextArray.size - index) + paddingEnd),
+                        0f,
+                        null
+                    )
+                }
             }
         }
     }
 
     fun setText(text: String) {
+        val beforeSize = mShowTextArray.size
         mShowTextArray.clear()
         text.split("").filter { it.isNotEmpty() }.forEach {
             mShowTextArray.add(it)
+        }
+        if(beforeSize != mShowTextArray.size){
+            requestLayout()
         }
         invalidate()
     }
 
     fun setText(text: List<String>) {
+        val beforeSize = mShowTextArray.size
         mShowTextArray.clear()
         mShowTextArray.addAll(text)
+        if(beforeSize != mShowTextArray.size){
+            requestLayout()
+        }
         invalidate()
     }
-
-    fun drawRightToLeft(canvas: Canvas?) {
-
-    }
-
-    fun drawLeftToRight(canvas: Canvas?) {
-
-    }
-
 }

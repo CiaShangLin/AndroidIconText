@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             mIconText.setText((count++).toString())
-            sendEmptyMessageDelayed(0,1)
+            sendEmptyMessageDelayed(0,50)
         }
     }
 
