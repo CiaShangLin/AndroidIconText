@@ -9,7 +9,7 @@
     <com.shang.icontext.IconText
         android:id="@+id/iconText"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="@dimen/IconTextTextSize"
         android:paddingStart="0dp"
         android:paddingTop="0dp"
         android:paddingEnd="0dp"
