@@ -1,6 +1,36 @@
 # Android  Icon Text
 ## 功能介紹
 特殊圖片數字顯示元件
+建議使用方法
+寬度wrap_content，高度固定dp，因為數字圖片通常都是1:1的比例
+倒數功能是做在Activity用Hanlder 50ms去刷新的，要做在裡面要改用Surface
+由於jcenter不能傳了所以也沒打算作成Library，而且實際使用圖片一定都不一樣
+有預設圖片太佔空間了。
+
+## xml
+```java
+    <com.shang.icontext.IconText
+        android:id="@+id/iconText"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/IconTextTextSize"
+        android:paddingStart="0dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="0dp"
+        android:paddingBottom="0dp"
+        app:it_defaultText="0"
+        app:it_space="@dimen/IconTextSpace"
+        app:it_textSize="@dimen/IconTextTextSize"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
+```
+
+## 屬性介紹
+|  attr |  description | type | default |
+| ------------ | ------------ |------------ |------------ |
+|  it_defaultText | 預設文字  | String | "0"
+|  it_textSize| 文字寬高  | dimension | 30dp
+|  it_space|  文字內間距 |dimension | 0dp
+
 
 ## Demo圖片
 ##### TextSize=30dp
