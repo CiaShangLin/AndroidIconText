@@ -1,11 +1,11 @@
 # Android  Icon Text
 ## 功能介紹
-特殊圖片數字顯示元件
-建議使用方法
-寬度wrap_content，高度固定dp，因為數字圖片通常都是1:1的比例
-倒數功能是做在Activity用Hanlder 50ms去刷新的，要做在裡面要改用Surface
-由於jcenter不能傳了所以也沒打算作成Library，而且實際使用圖片一定都不一樣
-有預設圖片太佔空間了。
+特殊圖片數字顯示元件<br />
+建議使用方法<br />
+寬度wrap_content，高度固定dp，因為數字圖片通常都是1:1的比例<br />
+倒數功能是做在Activity用Hanlder 50ms去刷新的，要做在裡面要改用Surface<br />
+由於jcenter不能傳了所以也沒打算作成Library，而且實際使用圖片一定都不一樣<br />
+有預設圖片太佔空間了。<br />
 
 ## xml
 ```java
