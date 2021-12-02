@@ -14,6 +14,8 @@ import androidx.core.content.res.use
  * 使用方法
  * 寬度 = 不限,warp,match,xxDp
  * 高度 = xxDp
+ * 建議寬度使用wrap,高度使用固定dp,因為match寫得比較不好,而且沒有置中功能
+ * 倒數功能要研究一下surface
  */
 class IconText @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -156,8 +158,10 @@ class IconText @JvmOverloads constructor(
             mShowTextArray.add(it)
         }
         if (beforeSize != mShowTextArray.size) {
+            //刷新Layout重新繪製元件寬高
             requestLayout()
         }
+        //刷新canvas
         invalidate()
     }
 
