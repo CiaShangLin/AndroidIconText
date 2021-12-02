@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="IconTextTextSize">16dp</dimen>
+    <dimen name="IconTextTextSize">30dp</dimen>
     <dimen name="IconTextSpace">0dp</dimen>
 </resources>
