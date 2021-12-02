@@ -14,7 +14,7 @@
         android:paddingTop="0dp"
         android:paddingEnd="0dp"
         android:paddingBottom="0dp"
-        app:it_defaultText="0"
+        app:it_defaultText="0123456789"
         app:it_space="@dimen/IconTextSpace"
         app:it_textSize="@dimen/IconTextTextSize"
         app:layout_constraintStart_toStartOf="parent"
