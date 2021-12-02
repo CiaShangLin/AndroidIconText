@@ -3,6 +3,8 @@
 特殊圖片數字顯示元件<br />
 建議使用方法<br />
 寬度wrap_content，高度固定dp，因為數字圖片通常都是1:1的比例<br />
+內間距可以用it_space，左右可以用paddingStart和PaddingEnd去設置<br />
+高度的padding比較特別，當高度是固定時設置paddingTop和paddingBottom它會撐開<br />
 倒數功能是做在Activity用Hanlder 50ms去刷新的，要做在裡面要改用Surface<br />
 由於jcenter不能傳了所以也沒打算作成Library，而且實際使用圖片一定都不一樣<br />
 有預設圖片太佔空間了。<br />
