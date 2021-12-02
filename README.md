@@ -43,5 +43,11 @@
 [![添加背景](https://github.com/CiaShangLin/AndroidIconText/blob/master/demo/background.png?raw=true "添加背景")](https://github.com/CiaShangLin/AndroidIconText/blob/master/demo/background.png?raw=true "添加背景")
 ##### 間距(space)=20dp
 [![間距20dp](https://github.com/CiaShangLin/AndroidIconText/blob/master/demo/sapce20dp.png?raw=true "間距20dp")](https://github.com/CiaShangLin/AndroidIconText/blob/master/demo/sapce20dp.png?raw=true "間距20dp")
+##### 間距(space)=10dp，paddingStart=0dp，paddingEnd=0dp
+[![間距10dp](https://github.com/CiaShangLin/AndroidIconText/blob/master/demo/space10.png?raw=true "間距10dp")](https://github.com/CiaShangLin/AndroidIconText/blob/master/demo/space10.png?raw=true "間距10dp")
+##### 間距(space)=10dp，paddingStart=10dp，paddingEnd=10dp
+[![space10+padding10](https://github.com/CiaShangLin/AndroidIconText/blob/master/demo/space10_padding10.png?raw=true "space10+padding10")](https://github.com/CiaShangLin/AndroidIconText/blob/master/demo/space10_padding10.png?raw=true "space10+padding10")
+##### 間距(space)=0dp，paddingTop=10dp，paddingBottom=10dp
+[![height_padding_10](https://github.com/CiaShangLin/AndroidIconText/blob/master/demo/height_padding10.png?raw=true "height_padding_10")](https://github.com/CiaShangLin/AndroidIconText/blob/master/demo/height_padding10.png?raw=true "height_padding_10")
 ##### 倒數Gif
 [![倒數Gif](https://github.com/CiaShangLin/AndroidIconText/blob/master/demo/countdown.gif?raw=true "倒數Gif")](https://github.com/CiaShangLin/AndroidIconText/blob/master/demo/countdown.gif?raw=true "倒數Gif")
