@@ -16,6 +16,7 @@ import androidx.core.content.res.use
  * 高度 = xxDp
  * 建議寬度使用wrap,高度使用固定dp,因為match寫得比較不好,而且沒有置中功能
  * 倒數功能要研究一下surface
+ * 目前只有支援0123456789不支援其他特殊符號，因為圖片比例不同
  */
 class IconText @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -79,7 +80,7 @@ class IconText @JvmOverloads constructor(
 
     private fun createBitmap(resID: Int): Bitmap {
         val bitmapFactory = BitmapFactory.decodeResource(resources, resID)
-        //一般的數字大小應該是1:1的
+        //一般的數字大小應該是1:1的，有要加入特殊字元應該要用when去設定他的寬高
         val bitmap =
             Bitmap.createScaledBitmap(bitmapFactory, mTextSize.toInt(), mTextSize.toInt(), false)
         bitmapFactory.recycle()
